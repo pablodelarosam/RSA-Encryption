@@ -11,5 +11,6 @@ target 'RSA-Encryption' do
   pod 'Firebase/Auth'
   pod 'Firebase/Database'
   pod 'JSQMessagesViewController'
+  pod 'Heimdall', '~> 1.1.0'
 
 end

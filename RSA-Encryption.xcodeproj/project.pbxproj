@@ -17,7 +17,68 @@
 		9178B88620998B4E00B0BC75 /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 9178B88520998B4E00B0BC75 /* Assets.xcassets */; };
 		9178B88920998B4E00B0BC75 /* LaunchScreen.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 9178B88720998B4E00B0BC75 /* LaunchScreen.storyboard */; };
 		AF6BF3BCC71CF77AD3A57906 /* Pods_RSA_Encryption.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 8D5A264D89FCFD46C83AA8B4 /* Pods_RSA_Encryption.framework */; };
+		C81DDD20209B86AF00BB98DD /* Heimdall.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = C81DDD17209B869800BB98DD /* Heimdall.framework */; };
+		C81DDD21209B86AF00BB98DD /* Heimdall.framework in Embed Frameworks */ = {isa = PBXBuildFile; fileRef = C81DDD17209B869800BB98DD /* Heimdall.framework */; settings = {ATTRIBUTES = (CodeSignOnCopy, RemoveHeadersOnCopy, ); }; };
 /* End PBXBuildFile section */
+
+/* Begin PBXContainerItemProxy section */
+		C81DDD16209B869800BB98DD /* PBXContainerItemProxy */ = {
+			isa = PBXContainerItemProxy;
+			containerPortal = C81DDD0F209B869800BB98DD /* Heimdall.xcodeproj */;
+			proxyType = 2;
+			remoteGlobalIDString = 8E866C541AE8FBEC005682A2;
+			remoteInfo = Heimdall;
+		};
+		C81DDD18209B869800BB98DD /* PBXContainerItemProxy */ = {
+			isa = PBXContainerItemProxy;
+			containerPortal = C81DDD0F209B869800BB98DD /* Heimdall.xcodeproj */;
+			proxyType = 2;
+			remoteGlobalIDString = 59B0020E1BE2D1410020EF3D;
+			remoteInfo = "Heimdall-TVOS";
+		};
+		C81DDD1A209B869800BB98DD /* PBXContainerItemProxy */ = {
+			isa = PBXContainerItemProxy;
+			containerPortal = C81DDD0F209B869800BB98DD /* Heimdall.xcodeproj */;
+			proxyType = 2;
+			remoteGlobalIDString = 8E866C5F1AE8FBEC005682A2;
+			remoteInfo = HeimdallTests;
+		};
+		C81DDD1C209B869800BB98DD /* PBXContainerItemProxy */ = {
+			isa = PBXContainerItemProxy;
+			containerPortal = C81DDD0F209B869800BB98DD /* Heimdall.xcodeproj */;
+			proxyType = 2;
+			remoteGlobalIDString = 8E38307A1AFE176A007E4235;
+			remoteInfo = CommonCrypto;
+		};
+		C81DDD1E209B86A500BB98DD /* PBXContainerItemProxy */ = {
+			isa = PBXContainerItemProxy;
+			containerPortal = C81DDD0F209B869800BB98DD /* Heimdall.xcodeproj */;
+			proxyType = 1;
+			remoteGlobalIDString = 8E866C531AE8FBEC005682A2;
+			remoteInfo = Heimdall;
+		};
+		C81DDD22209B86AF00BB98DD /* PBXContainerItemProxy */ = {
+			isa = PBXContainerItemProxy;
+			containerPortal = C81DDD0F209B869800BB98DD /* Heimdall.xcodeproj */;
+			proxyType = 1;
+			remoteGlobalIDString = 8E866C531AE8FBEC005682A2;
+			remoteInfo = Heimdall;
+		};
+/* End PBXContainerItemProxy section */
+
+/* Begin PBXCopyFilesBuildPhase section */
+		C81DDD24209B86AF00BB98DD /* Embed Frameworks */ = {
+			isa = PBXCopyFilesBuildPhase;
+			buildActionMask = 2147483647;
+			dstPath = "";
+			dstSubfolderSpec = 10;
+			files = (
+				C81DDD21209B86AF00BB98DD /* Heimdall.framework in Embed Frameworks */,
+			);
+			name = "Embed Frameworks";
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+/* End PBXCopyFilesBuildPhase section */
 
 /* Begin PBXFileReference section */
 		8D5A264D89FCFD46C83AA8B4 /* Pods_RSA_Encryption.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = Pods_RSA_Encryption.framework; sourceTree = BUILT_PRODUCTS_DIR; };
@@ -34,6 +95,7 @@
 		9178B88820998B4E00B0BC75 /* Base */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; name = Base; path = Base.lproj/LaunchScreen.storyboard; sourceTree = "<group>"; };
 		9178B88A20998B4E00B0BC75 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
 		92D36F5FCAB9DACBF6FDF567 /* Pods-RSA-Encryption.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-RSA-Encryption.release.xcconfig"; path = "Pods/Target Support Files/Pods-RSA-Encryption/Pods-RSA-Encryption.release.xcconfig"; sourceTree = "<group>"; };
+		C81DDD0F209B869800BB98DD /* Heimdall.xcodeproj */ = {isa = PBXFileReference; lastKnownFileType = "wrapper.pb-project"; name = Heimdall.xcodeproj; path = "Heimdall-master/Heimdall.xcodeproj"; sourceTree = "<group>"; };
 		F706A1AF2F45BAE35AC1B092 /* Pods-RSA-Encryption.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-RSA-Encryption.debug.xcconfig"; path = "Pods/Target Support Files/Pods-RSA-Encryption/Pods-RSA-Encryption.debug.xcconfig"; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
@@ -42,6 +104,7 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				C81DDD20209B86AF00BB98DD /* Heimdall.framework in Frameworks */,
 				AF6BF3BCC71CF77AD3A57906 /* Pods_RSA_Encryption.framework in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
@@ -60,6 +123,7 @@
 		9178B86F20998B4E00B0BC75 = {
 			isa = PBXGroup;
 			children = (
+				C81DDD0F209B869800BB98DD /* Heimdall.xcodeproj */,
 				9178B87A20998B4E00B0BC75 /* RSA-Encryption */,
 				9178B87920998B4E00B0BC75 /* Products */,
 				A8DA273B8F2881560AB4251C /* Pods */,
@@ -102,6 +166,17 @@
 			name = Pods;
 			sourceTree = "<group>";
 		};
+		C81DDD10209B869800BB98DD /* Products */ = {
+			isa = PBXGroup;
+			children = (
+				C81DDD17209B869800BB98DD /* Heimdall.framework */,
+				C81DDD19209B869800BB98DD /* Heimdall.framework */,
+				C81DDD1B209B869800BB98DD /* HeimdallTests.xctest */,
+				C81DDD1D209B869800BB98DD /* CommonCrypto.framework */,
+			);
+			name = Products;
+			sourceTree = "<group>";
+		};
 /* End PBXGroup section */
 
 /* Begin PBXNativeTarget section */
@@ -115,10 +190,13 @@
 				9178B87620998B4E00B0BC75 /* Resources */,
 				BBECD47904458B9BA18272F1 /* [CP] Embed Pods Frameworks */,
 				901586B2DCC727627D503FDA /* [CP] Copy Pods Resources */,
+				C81DDD24209B86AF00BB98DD /* Embed Frameworks */,
 			);
 			buildRules = (
 			);
 			dependencies = (
+				C81DDD1F209B86A500BB98DD /* PBXTargetDependency */,
+				C81DDD23209B86AF00BB98DD /* PBXTargetDependency */,
 			);
 			name = "RSA-Encryption";
 			productName = "RSA-Encryption";
@@ -152,12 +230,49 @@
 			mainGroup = 9178B86F20998B4E00B0BC75;
 			productRefGroup = 9178B87920998B4E00B0BC75 /* Products */;
 			projectDirPath = "";
+			projectReferences = (
+				{
+					ProductGroup = C81DDD10209B869800BB98DD /* Products */;
+					ProjectRef = C81DDD0F209B869800BB98DD /* Heimdall.xcodeproj */;
+				},
+			);
 			projectRoot = "";
 			targets = (
 				9178B87720998B4E00B0BC75 /* RSA-Encryption */,
 			);
 		};
 /* End PBXProject section */
+
+/* Begin PBXReferenceProxy section */
+		C81DDD17209B869800BB98DD /* Heimdall.framework */ = {
+			isa = PBXReferenceProxy;
+			fileType = wrapper.framework;
+			path = Heimdall.framework;
+			remoteRef = C81DDD16209B869800BB98DD /* PBXContainerItemProxy */;
+			sourceTree = BUILT_PRODUCTS_DIR;
+		};
+		C81DDD19209B869800BB98DD /* Heimdall.framework */ = {
+			isa = PBXReferenceProxy;
+			fileType = wrapper.framework;
+			path = Heimdall.framework;
+			remoteRef = C81DDD18209B869800BB98DD /* PBXContainerItemProxy */;
+			sourceTree = BUILT_PRODUCTS_DIR;
+		};
+		C81DDD1B209B869800BB98DD /* HeimdallTests.xctest */ = {
+			isa = PBXReferenceProxy;
+			fileType = wrapper.cfbundle;
+			path = HeimdallTests.xctest;
+			remoteRef = C81DDD1A209B869800BB98DD /* PBXContainerItemProxy */;
+			sourceTree = BUILT_PRODUCTS_DIR;
+		};
+		C81DDD1D209B869800BB98DD /* CommonCrypto.framework */ = {
+			isa = PBXReferenceProxy;
+			fileType = wrapper.framework;
+			path = CommonCrypto.framework;
+			remoteRef = C81DDD1C209B869800BB98DD /* PBXContainerItemProxy */;
+			sourceTree = BUILT_PRODUCTS_DIR;
+		};
+/* End PBXReferenceProxy section */
 
 /* Begin PBXResourcesBuildPhase section */
 		9178B87620998B4E00B0BC75 /* Resources */ = {
@@ -216,6 +331,7 @@
 				"${SRCROOT}/Pods/Target Support Files/Pods-RSA-Encryption/Pods-RSA-Encryption-frameworks.sh",
 				"${BUILT_PRODUCTS_DIR}/GTMSessionFetcher/GTMSessionFetcher.framework",
 				"${BUILT_PRODUCTS_DIR}/GoogleToolboxForMac/GoogleToolboxForMac.framework",
+				"${BUILT_PRODUCTS_DIR}/Heimdall/Heimdall.framework",
 				"${BUILT_PRODUCTS_DIR}/JSQMessagesViewController/JSQMessagesViewController.framework",
 				"${BUILT_PRODUCTS_DIR}/JSQSystemSoundPlayer/JSQSystemSoundPlayer.framework",
 				"${BUILT_PRODUCTS_DIR}/leveldb-library/leveldb.framework",
@@ -225,6 +341,7 @@
 			outputPaths = (
 				"${TARGET_BUILD_DIR}/${FRAMEWORKS_FOLDER_PATH}/GTMSessionFetcher.framework",
 				"${TARGET_BUILD_DIR}/${FRAMEWORKS_FOLDER_PATH}/GoogleToolboxForMac.framework",
+				"${TARGET_BUILD_DIR}/${FRAMEWORKS_FOLDER_PATH}/Heimdall.framework",
 				"${TARGET_BUILD_DIR}/${FRAMEWORKS_FOLDER_PATH}/JSQMessagesViewController.framework",
 				"${TARGET_BUILD_DIR}/${FRAMEWORKS_FOLDER_PATH}/JSQSystemSoundPlayer.framework",
 				"${TARGET_BUILD_DIR}/${FRAMEWORKS_FOLDER_PATH}/leveldb.framework",
@@ -251,6 +368,19 @@
 			runOnlyForDeploymentPostprocessing = 0;
 		};
 /* End PBXSourcesBuildPhase section */
+
+/* Begin PBXTargetDependency section */
+		C81DDD1F209B86A500BB98DD /* PBXTargetDependency */ = {
+			isa = PBXTargetDependency;
+			name = Heimdall;
+			targetProxy = C81DDD1E209B86A500BB98DD /* PBXContainerItemProxy */;
+		};
+		C81DDD23209B86AF00BB98DD /* PBXTargetDependency */ = {
+			isa = PBXTargetDependency;
+			name = Heimdall;
+			targetProxy = C81DDD22209B86AF00BB98DD /* PBXContainerItemProxy */;
+		};
+/* End PBXTargetDependency section */
 
 /* Begin PBXVariantGroup section */
 		9178B87F20998B4E00B0BC75 /* Main.storyboard */ = {
@@ -383,9 +513,10 @@
 			isa = XCBuildConfiguration;
 			baseConfigurationReference = F706A1AF2F45BAE35AC1B092 /* Pods-RSA-Encryption.debug.xcconfig */;
 			buildSettings = {
+				ALWAYS_EMBED_SWIFT_STANDARD_LIBRARIES = YES;
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				CODE_SIGN_STYLE = Automatic;
-				DEVELOPMENT_TEAM = BYKNZ8J7A7;
+				DEVELOPMENT_TEAM = 4MMPB725JG;
 				INFOPLIST_FILE = "RSA-Encryption/Info.plist";
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks";
 				PRODUCT_BUNDLE_IDENTIFIER = "CraftCode.RSA-Encryption";
@@ -400,9 +531,10 @@
 			isa = XCBuildConfiguration;
 			baseConfigurationReference = 92D36F5FCAB9DACBF6FDF567 /* Pods-RSA-Encryption.release.xcconfig */;
 			buildSettings = {
+				ALWAYS_EMBED_SWIFT_STANDARD_LIBRARIES = YES;
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				CODE_SIGN_STYLE = Automatic;
-				DEVELOPMENT_TEAM = BYKNZ8J7A7;
+				DEVELOPMENT_TEAM = 4MMPB725JG;
 				INFOPLIST_FILE = "RSA-Encryption/Info.plist";
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks";
 				PRODUCT_BUNDLE_IDENTIFIER = "CraftCode.RSA-Encryption";

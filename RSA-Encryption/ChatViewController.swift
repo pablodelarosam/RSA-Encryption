@@ -8,10 +8,12 @@
 
 import UIKit
 import JSQMessagesViewController
+import Heimdall
 
 class ChatViewController: JSQMessagesViewController {
     
-      var messages = [JSQMessage]()
+    var messages = [JSQMessage]()
+    var pubKeyDict = [String: Data]() // Saves all the public key for a given userId
     
     lazy var outgoingBubble: JSQMessagesBubbleImage = {
         return JSQMessagesBubbleImageFactory()!.outgoingMessagesBubbleImage(with: UIColor.jsq_messageBubbleBlue())
@@ -68,6 +70,9 @@ class ChatViewController: JSQMessagesViewController {
             {
                 if let message = JSQMessage(senderId: id, displayName: name, text: text)
                 {
+                    
+                    self?.decryptRSA(message: text)
+                    print(message.text)
                     self?.messages.append(message)
                     
                     self?.finishReceivingMessage()
@@ -143,18 +148,58 @@ class ChatViewController: JSQMessagesViewController {
         return messages[indexPath.item].senderId == senderId ? 0 : 15
     }
     
-    override func didPressSend(_ button: UIButton!, withMessageText text: String!, senderId: String!, senderDisplayName: String!, date: Date!)
+    override func didPressSend(_ button: UIButton!, withMessageText text: String!, senderId: String!, senderDisplayName: String!, date: Date!, receiverID: String!)
     {
-        let ref = Constants.refs.databaseChats.childByAutoId()
+        let ref = Constants.refs.databaseChats.childByAutoId() //crear nuevo hijo con nuevo id
+        let pk: Data
+        //RSA(text)
+        if !pubKeyDict.keys.contains(receiverId){ // Verify if the public key of the user exists
+            pk = createPublicKey(tag: receiverId)
+            pubKeyDict[receiverId] = pk
+        }
+        let ciphertext = encryptRSA(keyData: pk, message: text)
         
-        let message = ["sender_id": senderId, "name": senderDisplayName, "text": text, "encrypted_message": text]
+        let message = ["sender_id": senderId, "name": senderDisplayName, "text": text, "encrypted_message": ciphertext]  //encrypted = pub key
         
         ref.setValue(message)
         
         finishSendingMessage()
     }
     
+    func encryptRSA(keyData: Data, message: String) -> String?{
+        // On other party, assuming keyData contains the received public key data
+        if let partnerHeimdall = Heimdall(publicTag: "com.example.partner", publicKeyData: keyData) {
+            // Transmit some message to the partner
+            let encryptedMessage = partnerHeimdall.encrypt(message)
+            return encryptedMessage
+            // Transmit the encryptedMessage back to the origin of the public key
+        }
+        return nil
+    }
     
+    func decryptRSA(message: String){
+        let localHeimdall = Heimdall(tagPrefix: "com.example")
+        if let heimdall = localHeimdall {
+            if let decryptedMessage = heimdall.decrypt(message) {
+                print(decryptedMessage) // "This is a secret message to my partner"
+            }
+        }
+    }
+    
+    func createPublicKey(tag: String) -> Data? {
+        let localHeimdall = Heimdall(tagPrefix: "com.example")
+        if let heimdall = localHeimdall, let publicKeyData = heimdall.publicKeyDataX509() {
+            
+            var publicKeyString = publicKeyData.base64EncodedString()
+            publicKeyString = publicKeyString.replacingOccurrences(of: "/", with: "_")
+            publicKeyString = publicKeyString.replacingOccurrences(of: "+", with: "-")
+            print("Public Key String: \(publicKeyString)") // Something along the lines of "MIGfMA0GCSqGSIb3DQEBAQUAA..."
+            
+            // Data transmission of public key to the other party
+            return publicKeyData
+        }
+        return nil
+    }
     
 
     /*
