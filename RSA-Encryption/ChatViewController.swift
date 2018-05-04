@@ -40,9 +40,13 @@ class ChatViewController: JSQMessagesViewController {
 
         // Do any additional setup after loading the view.
       
-        observeMessages() // Manipulate the messages to decipher them
+        
         self.senderId = Auth.auth().currentUser?.uid
         
+    }
+    
+    override func viewWillAppear(_ animated: Bool) {
+        observeMessages() // Manipulate the messages to decipher them
     }
     
     private func observeMessages() {
@@ -50,15 +54,13 @@ class ChatViewController: JSQMessagesViewController {
         let messageQuery = messageRef.queryLimited(toLast:25)
         newMessageRefHandle = messageQuery.observe(.childAdded, with: { (snapshot) -> Void in
             let messageData = snapshot.value as! Dictionary<String, String>
-            if let id = messageData["senderId"] as String!, let name = messageData["senderName"] as String!, var text = messageData["text"] as String!, text.characters.count > 0 {
-                if self.tryDecryptRSA(tag: "com.example", message: text)!{
-                    text = self.decryptRSA(tag: "com.example", message: text)!
-                }
+            if let id = messageData["senderId"] as String!, let name = messageData["senderName"] as String!, var text = messageData["text"] as String!, var decript = messageData["decryptenMessage"], text.characters.count > 0 {
+              
                  // Decrypt text with identifier
-                self.addMessage(withId: id, name: name, text: text)
+                self.addMessage(withId: id, name: name, text: decript)
                 self.finishReceivingMessage()
             } else {
-                print("Error! Could not decode message data")
+            //    print("Error! Could not decode message data")
             }
         })
     }
@@ -146,6 +148,7 @@ class ChatViewController: JSQMessagesViewController {
         
         let pk: Data
         var encryptedMessage: String = ""
+        var decryptMessage: String = ""
         
         //RSA(text)
         if !pubKeyDict.keys.contains(senderId){ // Verify if the public key of the user exists
@@ -158,8 +161,16 @@ class ChatViewController: JSQMessagesViewController {
         if let partnerHeimdall = Heimdall(publicTag: "com.example.partner", publicKeyData: pk) {
             // Transmit some message to the partner
             let message = text!
+            var decryptMessage = text!
+            
+            
             encryptedMessage = partnerHeimdall.encrypt(message)!
+            if self.tryDecryptRSA(tag: "com.example", message: encryptedMessage)! {
+                decryptMessage = self.decryptRSA(tag: "com.example", message: encryptedMessage)!
+            }
+         
             print("Encrypted: \(encryptedMessage)")
+             print("Decrypted: \(decryptMessage)")
             // Transmit the encryptedMessage back to the origin of the public key
         }
         
@@ -167,6 +178,7 @@ class ChatViewController: JSQMessagesViewController {
             "senderId": senderId!,
             "senderName": senderDisplayName!,
             "text": encryptedMessage,
+            "decryptenMessage": text
             ]
         
         itemRef.setValue(messageItem)

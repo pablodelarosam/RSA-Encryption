@@ -54,7 +54,7 @@ class ChannelListViewController: UITableViewController {
                 self.channels.append(Channel(id: id, name: name))
                 self.tableView.reloadData()
             } else {
-                print("Error! Could not decode channel data")
+             //   print("Error! Could not decode channel data")
             }
         })
     }
@@ -122,6 +122,8 @@ class ChannelListViewController: UITableViewController {
         }
     }
     
+    
+
     
     override func prepare(for segue: UIStoryboardSegue, sender: Any?) {
         super.prepare(for: segue, sender: sender)
