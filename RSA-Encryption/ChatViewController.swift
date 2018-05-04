@@ -9,11 +9,13 @@
 import UIKit
 import JSQMessagesViewController
 import Firebase
+import Heimdall
 
 
 class ChatViewController: JSQMessagesViewController {
     
-      var messages = [JSQMessage]()
+    var messages = [JSQMessage]()
+    var pubKeyDict = [String: Data]() // Saves all the public key for a given userId
     
     private lazy var messageRef: DatabaseReference = self.channelRef!.child("messages")
     private var newMessageRefHandle: DatabaseHandle?
@@ -25,6 +27,7 @@ class ChatViewController: JSQMessagesViewController {
     lazy var incomingBubble: JSQMessagesBubbleImage = {
         return JSQMessagesBubbleImageFactory()!.incomingMessagesBubbleImage(with: UIColor.jsq_messageBubbleLightGray())
     }()
+    
     var channelRef: DatabaseReference?
     var channel: Channel? {
         didSet {
@@ -32,38 +35,55 @@ class ChatViewController: JSQMessagesViewController {
         }
     }
 
-
     override func viewDidLoad() {
         super.viewDidLoad()
 
         // Do any additional setup after loading the view.
       
-        observeMessages()
+        observeMessages() // Manipulate the messages to decipher them
         self.senderId = Auth.auth().currentUser?.uid
         
     }
     
     private func observeMessages() {
         messageRef = channelRef!.child("messages")
-        // 1.
         let messageQuery = messageRef.queryLimited(toLast:25)
-        
-        // 2. We can use the observe method to listen for new
-        // messages being written to the Firebase DB
         newMessageRefHandle = messageQuery.observe(.childAdded, with: { (snapshot) -> Void in
-            // 3
             let messageData = snapshot.value as! Dictionary<String, String>
-            
-            if let id = messageData["senderId"] as String!, let name = messageData["senderName"] as String!, let text = messageData["text"] as String!, text.characters.count > 0 {
-                // 4
+            if let id = messageData["senderId"] as String!, let name = messageData["senderName"] as String!, var text = messageData["text"] as String!, text.characters.count > 0 {
+                text = self.decryptRSA(tag: "com.example", message: text)! // Decrypt text with identifier
                 self.addMessage(withId: id, name: name, text: text)
-                
-                // 5
                 self.finishReceivingMessage()
             } else {
                 print("Error! Could not decode message data")
             }
         })
+    }
+    
+    func createPublicKey(tag: String) -> Data? {
+        let localHeimdall = Heimdall(tagPrefix: "com.example")
+        if let heimdall = localHeimdall, let publicKeyData = heimdall.publicKeyDataX509() {
+            var publicKeyString = publicKeyData.base64EncodedString()
+            publicKeyString = publicKeyString.replacingOccurrences(of: "/", with: "_")
+            publicKeyString = publicKeyString.replacingOccurrences(of: "+", with: "-")
+            print("Public Key String: \(publicKeyString)")
+            return publicKeyData // Data transmission of public key to the other party
+        }
+        return nil
+    }
+    
+    func decryptRSA(tag: String, message: String) -> String?{
+        let localHeimdall = Heimdall(tagPrefix: "com.example")
+        if let heimdall = localHeimdall {
+            if let decryptedMessage = heimdall.decrypt(message) {
+                return decryptedMessage
+            }
+            else{
+                return ""
+            }
+        }else{
+            return ""
+        }
     }
     
     private func addMessage(withId id: String, name: String, text: String) {
@@ -72,8 +92,6 @@ class ChatViewController: JSQMessagesViewController {
         }
     }
     
-   
-
     override func collectionView(_ collectionView: JSQMessagesCollectionView!, messageDataForItemAt indexPath: IndexPath!) -> JSQMessageData!
     {
         return messages[indexPath.item]
@@ -107,10 +125,31 @@ class ChatViewController: JSQMessagesViewController {
     override func didPressSend(_ button: UIButton!, withMessageText text: String!, senderId: String!, senderDisplayName: String!, date: Date!)
     {
         let itemRef = messageRef.childByAutoId() // 1
+        
+        let pk: Data
+        var encryptedMessage: String = ""
+        
+        //RSA(text)
+        if !pubKeyDict.keys.contains(senderId){ // Verify if the public key of the user exists
+            pk = createPublicKey(tag: senderId)!
+            pubKeyDict[senderId] = pk
+        }else{
+            pk = pubKeyDict[senderId]!
+        }
+        
+        if let partnerHeimdall = Heimdall(publicTag: "com.example.partner", publicKeyData: pk) {
+            // Transmit some message to the partner
+            let message = text!
+            encryptedMessage = partnerHeimdall.encrypt(message)!
+            print("Encrypted: \(encryptedMessage)")
+            //decryptRSA(tag: "com.example", message: encryptedMessage!)
+            // Transmit the encryptedMessage back to the origin of the public key
+        }
+        
         let messageItem = [ // 2
             "senderId": senderId!,
             "senderName": senderDisplayName!,
-            "text": text!,
+            "text": encryptedMessage,
             ]
         
         itemRef.setValue(messageItem) // 3
@@ -122,9 +161,6 @@ class ChatViewController: JSQMessagesViewController {
         finishSendingMessage() // 5
     }
     
-    
-    
-
     /*
     // MARK: - Navigation
 
