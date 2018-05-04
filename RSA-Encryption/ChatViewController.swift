@@ -51,7 +51,10 @@ class ChatViewController: JSQMessagesViewController {
         newMessageRefHandle = messageQuery.observe(.childAdded, with: { (snapshot) -> Void in
             let messageData = snapshot.value as! Dictionary<String, String>
             if let id = messageData["senderId"] as String!, let name = messageData["senderName"] as String!, var text = messageData["text"] as String!, text.characters.count > 0 {
-                text = self.decryptRSA(tag: "com.example", message: text)! // Decrypt text with identifier
+                if self.tryDecryptRSA(tag: "com.example", message: text)!{
+                    text = self.decryptRSA(tag: "com.example", message: text)!
+                }
+                 // Decrypt text with identifier
                 self.addMessage(withId: id, name: name, text: text)
                 self.finishReceivingMessage()
             } else {
@@ -83,6 +86,20 @@ class ChatViewController: JSQMessagesViewController {
             }
         }else{
             return ""
+        }
+    }
+    
+    func tryDecryptRSA(tag: String, message: String) -> Bool?{
+        let localHeimdall = Heimdall(tagPrefix: "com.example")
+        if let heimdall = localHeimdall {
+            if let decryptedMessage = heimdall.decrypt(message) {
+                return true
+            }
+            else{
+                return false
+            }
+        }else{
+            return false
         }
     }
     
@@ -142,23 +159,20 @@ class ChatViewController: JSQMessagesViewController {
             let message = text!
             encryptedMessage = partnerHeimdall.encrypt(message)!
             print("Encrypted: \(encryptedMessage)")
-            //decryptRSA(tag: "com.example", message: encryptedMessage!)
             // Transmit the encryptedMessage back to the origin of the public key
         }
         
-        let messageItem = [ // 2
+        let messageItem = [
             "senderId": senderId!,
             "senderName": senderDisplayName!,
             "text": encryptedMessage,
             ]
         
-        itemRef.setValue(messageItem) // 3
+        itemRef.setValue(messageItem)
         
-      
+        JSQSystemSoundPlayer.jsq_playMessageSentSound()
         
-        JSQSystemSoundPlayer.jsq_playMessageSentSound() // 4
-        
-        finishSendingMessage() // 5
+        finishSendingMessage()
     }
     
     /*
