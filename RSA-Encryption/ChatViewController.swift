@@ -76,6 +76,7 @@ class ChatViewController: JSQMessagesViewController {
         let localHeimdall = Heimdall(tagPrefix: "com.example")
         if let heimdall = localHeimdall {
             if let decryptedMessage = heimdall.decrypt(message) {
+                print("Decrypted Message: \(decryptedMessage)")
                 return decryptedMessage
             }
             else{
