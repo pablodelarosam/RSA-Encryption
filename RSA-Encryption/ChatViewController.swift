@@ -8,10 +8,15 @@
 
 import UIKit
 import JSQMessagesViewController
+import Firebase
+
 
 class ChatViewController: JSQMessagesViewController {
     
       var messages = [JSQMessage]()
+    
+    private lazy var messageRef: DatabaseReference = self.channelRef!.child("messages")
+    private var newMessageRefHandle: DatabaseHandle?
     
     lazy var outgoingBubble: JSQMessagesBubbleImage = {
         return JSQMessagesBubbleImageFactory()!.outgoingMessagesBubbleImage(with: UIColor.jsq_messageBubbleBlue())
@@ -20,98 +25,54 @@ class ChatViewController: JSQMessagesViewController {
     lazy var incomingBubble: JSQMessagesBubbleImage = {
         return JSQMessagesBubbleImageFactory()!.incomingMessagesBubbleImage(with: UIColor.jsq_messageBubbleLightGray())
     }()
+    var channelRef: DatabaseReference?
+    var channel: Channel? {
+        didSet {
+            title = channel?.name
+        }
+    }
+
 
     override func viewDidLoad() {
         super.viewDidLoad()
 
         // Do any additional setup after loading the view.
       
-        let defaults = UserDefaults.standard
+        observeMessages()
+        self.senderId = Auth.auth().currentUser?.uid
         
-        if  let id = defaults.string(forKey: "jsq_id"),
-            let name = defaults.string(forKey: "jsq_name")
-        {
-            senderId = id
-            senderDisplayName = name
-        }
-        else
-        {
-            senderId = String(arc4random_uniform(999999))
-            senderDisplayName = ""
+    }
+    
+    private func observeMessages() {
+        messageRef = channelRef!.child("messages")
+        // 1.
+        let messageQuery = messageRef.queryLimited(toLast:25)
+        
+        // 2. We can use the observe method to listen for new
+        // messages being written to the Firebase DB
+        newMessageRefHandle = messageQuery.observe(.childAdded, with: { (snapshot) -> Void in
+            // 3
+            let messageData = snapshot.value as! Dictionary<String, String>
             
-            defaults.set(senderId, forKey: "jsq_id")
-            defaults.synchronize()
-            
-            showDisplayNameDialog()
-        }
-        
-        title = "Chat: \(senderDisplayName!)"
-        
-        let tapGesture = UITapGestureRecognizer(target: self, action: #selector(showDisplayNameDialog))
-        tapGesture.numberOfTapsRequired = 1
-        
-        navigationController?.navigationBar.addGestureRecognizer(tapGesture)
-        
-        inputToolbar.contentView.leftBarButtonItem = nil
-        collectionView.collectionViewLayout.incomingAvatarViewSize = CGSize.zero
-        collectionView.collectionViewLayout.outgoingAvatarViewSize = CGSize.zero
-        
-        let query = Constants.refs.databaseChats.queryLimited(toLast: 10)
-        
-        _ = query.observe(.childAdded, with: { [weak self] snapshot in
-            
-            if  let data        = snapshot.value as? [String: String],
-                let id          = data["sender_id"],
-                let name        = data["name"],
-                let text        = data["text"],
-                !text.isEmpty
-            {
-                if let message = JSQMessage(senderId: id, displayName: name, text: text)
-                {
-                    self?.messages.append(message)
-                    
-                    self?.finishReceivingMessage()
-                }
+            if let id = messageData["senderId"] as String!, let name = messageData["senderName"] as String!, let text = messageData["text"] as String!, text.characters.count > 0 {
+                // 4
+                self.addMessage(withId: id, name: name, text: text)
+                
+                // 5
+                self.finishReceivingMessage()
+            } else {
+                print("Error! Could not decode message data")
             }
         })
-        
     }
     
-    
-    @objc func showDisplayNameDialog()
-    {
-        let defaults = UserDefaults.standard
-        
-        let alert = UIAlertController(title: "Your Display Name", message: "Before you can chat, please choose a display name. Others will see this name when you send chat messages. You can change your display name again by tapping the navigation bar.", preferredStyle: .alert)
-        
-        alert.addTextField { textField in
-            
-            if let name = defaults.string(forKey: "jsq_name")
-            {
-                textField.text = name
-            }
-            else
-            {
-                let names = ["Pablo de la Rosa", "Alina de la Rosa", "Rana Raúl", "Trillian", "Slartibartfast", "Humma Kavula", "Deep Thought"]
-                textField.text = names[Int(arc4random_uniform(UInt32(names.count)))]
-            }
+    private func addMessage(withId id: String, name: String, text: String) {
+        if let message = JSQMessage(senderId: id, displayName: name, text: text) {
+            messages.append(message)
         }
-        
-        alert.addAction(UIAlertAction(title: "OK", style: .default, handler: { [weak self, weak alert] _ in
-            
-            if let textField = alert?.textFields?[0], !textField.text!.isEmpty {
-                
-                self?.senderDisplayName = textField.text
-                
-                self?.title = "Chat: \(self!.senderDisplayName!)"
-                
-                defaults.set(textField.text, forKey: "jsq_name")
-                defaults.synchronize()
-            }
-        }))
-        
-        present(alert, animated: true, completion: nil)
     }
+    
+   
 
     override func collectionView(_ collectionView: JSQMessagesCollectionView!, messageDataForItemAt indexPath: IndexPath!) -> JSQMessageData!
     {
@@ -145,13 +106,20 @@ class ChatViewController: JSQMessagesViewController {
     
     override func didPressSend(_ button: UIButton!, withMessageText text: String!, senderId: String!, senderDisplayName: String!, date: Date!)
     {
-        let ref = Constants.refs.databaseChats.childByAutoId()
+        let itemRef = messageRef.childByAutoId() // 1
+        let messageItem = [ // 2
+            "senderId": senderId!,
+            "senderName": senderDisplayName!,
+            "text": text!,
+            ]
         
-        let message = ["sender_id": senderId, "name": senderDisplayName, "text": text, "encrypted_message": text]
+        itemRef.setValue(messageItem) // 3
         
-        ref.setValue(message)
+      
         
-        finishSendingMessage()
+        JSQSystemSoundPlayer.jsq_playMessageSentSound() // 4
+        
+        finishSendingMessage() // 5
     }
     
     

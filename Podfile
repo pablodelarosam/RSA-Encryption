@@ -11,5 +11,7 @@ target 'RSA-Encryption' do
   pod 'Firebase/Auth'
   pod 'Firebase/Database'
   pod 'JSQMessagesViewController'
+  pod 'SwiftyRSA'
+
 
 end

@@ -7,6 +7,10 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
+		91470172209BBC330097DFEF /* LoginViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 91470171209BBC330097DFEF /* LoginViewController.swift */; };
+		91470174209BBC880097DFEF /* ChannelListViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 91470173209BBC880097DFEF /* ChannelListViewController.swift */; };
+		91470176209BBCE20097DFEF /* Channel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 91470175209BBCE20097DFEF /* Channel.swift */; };
+		91470178209BED820097DFEF /* CreateChannelCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 91470177209BED820097DFEF /* CreateChannelCell.swift */; };
 		91603211209A19DE002A3BE3 /* GoogleService-Info.plist in Resources */ = {isa = PBXBuildFile; fileRef = 91603210209A19DE002A3BE3 /* GoogleService-Info.plist */; };
 		91603213209A20E2002A3BE3 /* Constants.swift in Sources */ = {isa = PBXBuildFile; fileRef = 91603212209A20E2002A3BE3 /* Constants.swift */; };
 		91603215209A22DB002A3BE3 /* ChatViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 91603214209A22DB002A3BE3 /* ChatViewController.swift */; };
@@ -21,6 +25,10 @@
 
 /* Begin PBXFileReference section */
 		8D5A264D89FCFD46C83AA8B4 /* Pods_RSA_Encryption.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = Pods_RSA_Encryption.framework; sourceTree = BUILT_PRODUCTS_DIR; };
+		91470171209BBC330097DFEF /* LoginViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LoginViewController.swift; sourceTree = "<group>"; };
+		91470173209BBC880097DFEF /* ChannelListViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ChannelListViewController.swift; sourceTree = "<group>"; };
+		91470175209BBCE20097DFEF /* Channel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Channel.swift; sourceTree = "<group>"; };
+		91470177209BED820097DFEF /* CreateChannelCell.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = CreateChannelCell.swift; sourceTree = "<group>"; };
 		91603210209A19DE002A3BE3 /* GoogleService-Info.plist */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.plist.xml; path = "GoogleService-Info.plist"; sourceTree = "<group>"; };
 		91603212209A20E2002A3BE3 /* Constants.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Constants.swift; sourceTree = "<group>"; };
 		91603214209A22DB002A3BE3 /* ChatViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ChatViewController.swift; sourceTree = "<group>"; };
@@ -81,6 +89,10 @@
 				9178B87B20998B4E00B0BC75 /* AppDelegate.swift */,
 				9178B87D20998B4E00B0BC75 /* ViewController.swift */,
 				91603212209A20E2002A3BE3 /* Constants.swift */,
+				91470175209BBCE20097DFEF /* Channel.swift */,
+				91470171209BBC330097DFEF /* LoginViewController.swift */,
+				91470173209BBC880097DFEF /* ChannelListViewController.swift */,
+				91470177209BED820097DFEF /* CreateChannelCell.swift */,
 				91603214209A22DB002A3BE3 /* ChatViewController.swift */,
 				91603216209A239B002A3BE3 /* Bridging-Header.h */,
 				9178B87F20998B4E00B0BC75 /* Main.storyboard */,
@@ -242,7 +254,11 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				91470172209BBC330097DFEF /* LoginViewController.swift in Sources */,
+				91470176209BBCE20097DFEF /* Channel.swift in Sources */,
+				91470178209BED820097DFEF /* CreateChannelCell.swift in Sources */,
 				9178B87E20998B4E00B0BC75 /* ViewController.swift in Sources */,
+				91470174209BBC880097DFEF /* ChannelListViewController.swift in Sources */,
 				9178B88420998B4E00B0BC75 /* RSA_Encryption.xcdatamodeld in Sources */,
 				9178B87C20998B4E00B0BC75 /* AppDelegate.swift in Sources */,
 				91603215209A22DB002A3BE3 /* ChatViewController.swift in Sources */,
